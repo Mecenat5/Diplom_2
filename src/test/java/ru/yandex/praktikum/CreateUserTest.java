@@ -42,7 +42,7 @@ public class CreateUserTest {
     @Description("Проверка - нельзя создать двух одинаковых курьеров")
     public void createIdenticalUser() {
         Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
-        Response response2 = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
+        StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
         statusCode = response.then().log().all().extract().statusCode();
         String message = response.then().log().all().extract().path("message");
         isCreate = response.then().log().all().extract().path("success");

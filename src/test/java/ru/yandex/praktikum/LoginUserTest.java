@@ -30,8 +30,8 @@ public class LoginUserTest {
     @DisplayName("Авторизация пользователя")
     @Description("Проверка - успешно залогиниться под существующим пользователем")
     public void loginingUser() {
-        Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
-        Response loginUser = StepUser.loginUser(RANDOM_EMAIL, RANDOM_PASSWORD, " ");
+        Response response = StepUser.createUser(RANDOM_EMAIL_FIVE, RANDOM_PASSWORD, RANDOM_NAME);
+        StepUser.loginUser(RANDOM_EMAIL_FIVE, RANDOM_PASSWORD, " ");
         accessToken = response.then().log().all().extract().path("accessToken");
         statusCode = response.then().log().all().extract().statusCode();
         isLogin = response.then().log().all().extract().path("success");
@@ -43,9 +43,7 @@ public class LoginUserTest {
     @DisplayName("Авторизация пользователя с невалидным логином")
     @Description("Проверка - не происходит авторизация пользователя с невалидным логином")
     public void loginingUserIncorrectLogin() {
-        Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
-        Response loginUser = StepUser.loginUser("test54-data@yandex.ru", RANDOM_PASSWORD, " ");
-        accessToken = response.then().log().all().extract().path("accessToken");
+        Response response = StepUser.loginUser("test54-data@yandex.ru", RANDOM_PASSWORD, " ");
         statusCode = response.then().log().all().extract().statusCode();
         message = response.then().log().all().extract().path("message");
         isLogin = response.then().log().all().extract().path("success");
@@ -57,9 +55,8 @@ public class LoginUserTest {
     @DisplayName("Авторизация пользователя с невалидным паролем")
     @Description("Проверка - не происходит авторизация пользователя с невалидным паролем")
     public void loginingUserIncorrectPassword() {
-        Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
-        Response loginUser = StepUser.loginUser(RANDOM_EMAIL, "25854", " ");
-        accessToken = response.then().log().all().extract().path("accessToken");
+
+        Response response = StepUser.loginUser(RANDOM_EMAIL_FOURTH, "25854", " ");
         statusCode = response.then().log().all().extract().statusCode();
         message = response.then().log().all().extract().path("message");
         isLogin = response.then().log().all().extract().path("success");

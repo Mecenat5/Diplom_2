@@ -13,12 +13,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.yandex.praktikum.Constants.URL;
 import static ru.yandex.praktikum.GenerateUser.*;
+import static ru.yandex.praktikum.StepUser.loginUser;
 
 public class ChangeUserDataTest {
     String accessToken;
     int statusCode;
     String message;
-    boolean isСhange;
+    boolean isChange;
 
     @Before
     public void setUp() {
@@ -31,28 +32,26 @@ public class ChangeUserDataTest {
     public void updateUserByAuthorization() {
         Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
         accessToken = response.then().log().all().extract().path("accessToken");
-        Response loginUser = StepUser.loginUser(RANDOM_EMAIL, RANDOM_PASSWORD, " ");
-        Response changeUser = StepUser.changeUserAuthorization("test-data@yandex.ru", RANDOM_PASSWORD, RANDOM_NAME, accessToken);
+        StepUser.loginUser(RANDOM_EMAIL, RANDOM_PASSWORD, " ");
+        StepUser.changeUserAuthorization("test1-data@yandex.ru", RANDOM_PASSWORD, RANDOM_NAME, accessToken);
         statusCode = response.then().log().all().extract().statusCode();
-        boolean isСhange = response.then().log().all().extract().path("success");
+        isChange = response.then().log().all().extract().path("success");
 
         assertThat(statusCode, equalTo(200));
-        assertThat(isСhange, equalTo(true));
+        assertThat(isChange, equalTo(true));
     }
     @Test
     @DisplayName("Изменение данных неавторизованного пользователя")
-    @Description("Проверка - нельзя измененить данных неавторизованного пользователя")
+    @Description("Проверка - нельзя измененить данные неавторизованного пользователя")
     public void updateUserWithoutAuthorization() {
-        Response response = StepUser.createUser(RANDOM_EMAIL, RANDOM_PASSWORD, RANDOM_NAME);
-        Response loginUser = StepUser.loginUser(RANDOM_EMAIL, RANDOM_PASSWORD, " ");
-        Response changeUser = StepUser.changeUserNoAuthorization("test-data@yandex.ru", RANDOM_PASSWORD, RANDOM_NAME);
+        Response response = StepUser.changeUserNoAuthorization("test3-data@yandex.ru", RANDOM_PASSWORD, RANDOM_NAME);
         statusCode = response.then().log().all().extract().statusCode();
         message = response.then().log().all().extract().path("message");
-        isСhange = response.then().log().all().extract().path("success");
+        isChange = response.then().log().all().extract().path("success");
 
         assertThat(statusCode, equalTo(401));
         assertThat(message, equalTo("You should be authorised"));
-        assertThat(isСhange, equalTo(false));
+        assertThat(isChange, equalTo(false));
     }
     @After
     @Step("Удаление пользователя")
